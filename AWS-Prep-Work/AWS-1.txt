@@ -1,0 +1,179 @@
+Billing - change account alias
+Login url for IAM User - https://raviamlani.signin.aws.amazon.com/console
+
+Default Roles 
+https://console.aws.amazon.com/iam/home?#/roles/AWSServiceRoleForSupport
+https://console.aws.amazon.com/iam/home?#/roles/AWSServiceRoleForTrustedAdvisor
+
+IAM	
+Users - long term credentials
+Roles - short term credentials
+Groups - logical group of users
+
+Access Type
+Programmatic Access
+Management Console Access
+
+Least privilege access is IAM policy
+
+======== VPC ===========
+
+Region
+	VPC
+	Availability Zones
+		Subnets
+VPC cannot span across regions
+Subnets cannot span across Availability Zones
+
+CIDR and IP Address subnets
+
+Implied Router
+	For communication between subnets
+	Logical router
+	We get it automatically
+	
+Route Tables
+	50 entries max
+	200 tables max
+	
+Subnet Association to Route Table
+	If no association then it associates with the "main(VPC) route table"
+	One route table can be associated with multiple Subnets
+	One Subnet can only be associated with one route table
+	Subnet's association can be modified from one route table to another.
+	One default entry in the route table is for bigger VPC CIDR block - for all the subnets with Target as Local.
+	
+VPC/Main/Default route table
+	you can modify the entries but you cannot delete the main route table.
+	you can change the flag and make any other route table a main route table.
+	you cannot modify the default rule of main route table which allow all vpc 
+		subnets to communicate with one another.
+		ex. 10.0.0.0/16
+	
+VPC IP Addressing
+	CIDR - Class-less inter domain routing
+	RFC1918 CIDR Block range - which cannot be modified after creating VPC
+	Minimum size of CIDR block on VPC is /28 which is very small and max is /16.
+		meaning, out of 32 bits, 28 bits for network and 4 bits for host, subnets, EC2 instances etc. 
+	To modify the VPC, 
+		one option is to create another vpc and migrate everything from older to the newer one. 
+		second option is, to add the secondary CIDR block which doesn't overlap with your existing cidr block. 
+			check the information page on aws website. 
+			ex. if your primary cidr is 10.0.0.0/24 then you cannot add anything bigger than that
+			but smaller ranges are allowed ex. 10.0.0.0/25 to 28
+		Upon doing the second option, automatic entries are added to the route tables, 
+			with target as local and destination as your new CIDR.
+			
+Reserved IP's in each subnet:
+	First 4 and last IP's are reserved.
+	Ex. of 10.0.0.0/24 - we have 0 to 255 IPs. 
+		10.0.0.0 - base network
+		.1 - VPC router
+		.2 - DNS related
+		.3 - reserved for futuer use
+		.255 - future use probably
+	
+Internet Gateway
+	VPC can connect to Internet and other AWS Services using this Gateway.
+	Horizontally scaled, redundant, highly available service/VPC component.
+	Only one IG per vpc.
+	Cannot be deleted if attached to VPC
+	It does NAT (network address translation) between your private and public IPv4 addresses. 
+	
+Public Subnet and Private Subnet:
+	Private ranges are as below. Any companies can choose any of these ranges.  
+		10.0.0.0
+		172.16.0.0
+		192.168.0.0
+	Public ranges are - Publicaly exposed IPs which can be located by all the routers over the internet. 
+	
+Security Groups
+	Virtual Firewall to protect the servers defined within VPC
+	Defence in-depth
+NACL
+	Network Access Control Lists
+	Works at VPC level - First line of defence
+	
+Virtual Private Gateway
+	
+----------
+
+Two types of VPC:
+1. Default VPC
+	One per region, auto created
+	Comes with default CIDR, N ACL, Security Group, Route table settings
+	Has internet gateway by default
+2. Custom VPC
+	VPC which we create
+	We can decide the CIDR
+	Has default Security Group, N ACL and Route tables
+	No internet gateway by default, we need to create if needed
+	
+-----------
+
+Security Groups:
+
+Virtualization/Hyperviser on the host emulates the CPU, Memory, NIC and Disk
+	to install the Guest OS.
+XEN Virtualization
+
+Virtual NIC (Network interface card) is called ENI (Elastic Network Interface) in AWS
+
+SG works at ENI level of EC2.
+	Anything coming in/out to/of EC2 instance is called inbound/outbound of EC2.
+
+SG is a virtual firewall
+It controls the traffic at EC2 instance level, specifically at ENI level
+Upto 5 SGs allowed per EC2 instance
+We can only define allow rules, not the deny rules
+There is an implicit deny rule 
+It is stateful - if any traffic is allowed by inbound rule,
+	ex. request to see the webpage, so the return traffic of such req is allowed even if there is no rule to allow it.
+SGs are directional
+ 
+===================================
+
+Amazon s3 Transfer Accelaration
+
+Glacier - retrieval unit
+1 unit - 3 retrieval with 150 MB/s on every 5 minutes
+
+Lambda 
+total invocation requests, latency, and error rates, 
+the throttles, Dead Letter Queues errors and Iterator age
+
+Standard queues provide at least once delivery
+FIFO provides at least once processing
+
+By default, 
+Auto Scaling is not enabled in a DynamoDB table which is created using the AWS CLI.
+
+S3 upload limit:
+Largest object that can be uploaded using single PUT is 5 GB
+but with multipart upload it is 5 TB
+
+R 53:
+Failover routing policy: Active-passive
+Other policies: Active-Active
+
+Active-Active Failover uses all available resources all the time 
+without a primary nor a secondary resource.
+
+ElastiCache improves the performance of your database 
+through caching query results.
+
+Classic Load Balancer, the default for cross-zone load balancing depends on how you create the load balancer.
+SDK or CLI - disabled
+Console - enabled
+If enabled, distributes the traffic equally among all nodes.
+If disabled, distributes the traffic equally among all AZs.
+
+Read replicas provides elasticity to your RDS DB
+
+If instance is preparing to hibernate 'stopping' - billed
+if preparing to stop 'stopping' - not billed
+Terminated but reserved instance - billed until the end of payment term
+
+Does updating an ASG with new Launch Configuration affect existing EC2 instances?
+
+	
