@@ -1,0 +1,76 @@
+pod identifier = podname.default.svc.cluster.local
+
+GcePersistentDisk can only be accessed by one pod so updating the pod could cause an issue as a new pod will try 
+to access the disk. This can be prevented by adding below property to the Deployment file,
+spec:
+  Strategy:
+    type: Recreate
+
+Other useful commands:
+watch kubectl get pods
+
+Accessing external services (Endpoints):
+	Create Service (ClusterIP, LB) with no selector (so no connection with Pod) and 
+	K8s looks for an Endpoint with the same name.
+	Endpoints map external services to Service objects. 
+	Discovery via internal DNS
+	Endpoints can map to multiple IPs as well (then round robin)
+	
+	ExternalName within Service spec doesn't require Endpoints Object
+	
+	SideCars
+	Containers running along with our apps.
+	Userful for Proxies.
+	
+Lab: Maintaining a Service with Unhealthy Pods:
+-------------------------------------------------
+	
+Enable Cloud SQL APIs and spin up an SQL instance, and get the full instance name.	
+Proxy Docker image: cloudsql-docker/gce-proxy	
+	
+Service Accounts = non human user accounts that can be used by the applications
+	> gcloud iam service-accounts create cloudsqlproxy
+	
+	bind it with the role and project
+	> gcloud projects add-iam-policy-binding tim-acloud-guru<project-name> --member serviceaccount:cloudsqlproxy@tim-acloud-guru.iam.gserviceaccount.com<name of the service account> --role roles/cloudsql.client<roles>
+
+	Create a key that SA can use:
+	> gloud iam service-accounts keys create ./sqlproxy.json --iam-acount cloudsqlproxy@tim-acloud-guru.iam.gserviceaccount.com
+	
+Create a Secret out of that file.
+	> kubectl create secret generic cloudsql generic cloudsql-instance-credentials --from-file=credentials.json=./sqlproxy.json
+	
+Watch progress of the pods using,
+	> kubectl watch <deployment-name>
+	
+Set the timitlimit to quite the update if readiness probes are failing:
+	> kubectl patch deployments.v1.apps/myapp-deployment -p '{"spec":{"progressDeadlineSeconds":120}}'
+	
+	> kubectl rollout status deployment.v1.apps/myapp-deployment
+
+--------------------------------------------------
+
+Deployment Patterns:
+
+Rolling updates
+	Gradually replace pods
+	Specify threshold for failed pods
+
+Canary deployments
+	Combine multiple Deployments with a single Service
+	Small subset of traffic will be routed
+	
+BlueGreen deployments
+	Maintain 2 versions of your application deployment
+	Switch the traffic with the Service selector
+	
+Build/push the images to GCR without using Docker commands:
+	> gcloud builds submit --tag gcr.io/<project>/<artifact>/<version>
+	
+	
+	
+
+
+	
+	
+	
