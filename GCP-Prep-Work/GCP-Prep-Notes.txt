@@ -1,5 +1,11 @@
 
 Useful commands:
+cd myapp
+docker build -t acloud-guru-ch1-myapp:blue .
+docker tag acloud-guru-ch1-myapp:blue gcr.io/ravi-gcloud01-user01-prj01/myapp:blue
+docker push gcr.io/ravi-gcloud01-user01-prj01/myapp:blue
+
+
 watch kubectl get pods
 
 > gcloud container clusters get-credentials my-cluster-1 --zone=us-central1-a
