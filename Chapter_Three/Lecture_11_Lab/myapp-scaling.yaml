@@ -16,10 +16,9 @@ spec:
     spec:
       containers:
       - name: myapp
-        image: gcr.io/tim-acloud-guru/myapp:blue
+        image: gcr.io/ravi-gcloud01-user01-prj01/myapp:blue
         ports:
         - containerPort: 8888
         resources:
           requests:
             cpu: 200m
-
