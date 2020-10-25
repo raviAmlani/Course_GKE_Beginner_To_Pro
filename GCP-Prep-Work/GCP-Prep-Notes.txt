@@ -67,9 +67,13 @@ Get the logs:
 kubectl logs pod/<pod-name>
 kubectl logs --selector run=<label>
 
+Build/push the images to GCR without using Docker commands:
+> gcloud builds submit --tag gcr.io/<project>/<artifact>/<version>
+
 ----------------------------------------------
 
 Random Tips:
+
 GcePersistentDisk can only be accessed by one pod so updating the pod could cause an issue as a new pod will try
 to access the disk. This can be prevented by adding below property to the Deployment file,
 spec:
@@ -141,7 +145,7 @@ Create a Secret out of that file.
 Watch progress of the pods using,
 	> kubectl watch <deployment-name>
 
-Set the timitlimit to quite the update if readiness probes are failing:
+Set the timit-limit to quite the update if readiness probes are failing:
 	> kubectl patch deployments.v1.apps/myapp-deployment -p '{"spec":{"progressDeadlineSeconds":120}}'
 
 	> kubectl rollout status deployment.v1.apps/myapp-deployment
@@ -162,5 +166,16 @@ BlueGreen deployments
 	Maintain 2 versions of your application deployment
 	Switch the traffic with the Service selector
 
-Build/push the images to GCR without using Docker commands:
-	> gcloud builds submit --tag gcr.io/<project>/<artifact>/<version>
+-----------------------------------------------------
+
+Autoscaling:
+	HorizontalPodAutoscaler
+		based on CPU and Memory
+		custome application metrix supported
+		stackdriver metrix also supported
+	VerticalPodAutoscaler
+		CPU and RAM
+		updateMode: auto
+		restarts the pod
+	Node-pool autoscaler
+		
