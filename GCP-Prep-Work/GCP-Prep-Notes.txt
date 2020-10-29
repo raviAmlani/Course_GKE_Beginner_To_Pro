@@ -167,6 +167,7 @@ Rolling updates
 Canary deployments
 	Combine multiple Deployments with a single Service
 	Small subset of traffic will be routed
+	(can be automated with the tool called Spinnaker)
 
 BlueGreen deployments
 	Maintain 2 versions of your application deployment
@@ -185,3 +186,61 @@ Autoscaling:
 		restarts the pod
 	Node-pool autoscaler
 		
+		
+		
+================== COURSERA =======================
+
+WEEK-3
+-------
+Resources Hierarchy basics:
+Cloud Resources -> Projects -> product A (Folders) -> Team A (Folders) -> Dept. A (Folders) -> Company (Org. Node)
+Resources -> Projects -> Folders -> Org. Node
+	Tip: project does not have to reside in a folder in order to have a parent. 
+	In this instance, Project 5 inherits directly from the org node, example.com.
+
+Project ID (Chosen by us) and number (assigned by gcp) - unique and immutable
+Name - doesn't need to be unique, also mutable, chosen by us
+
+Resources inherit the policy from parents.
+
+Roles: Primitive, Predefined, Custom
+Primitive Roles:
+	Coarse-grained
+	Owner, Editor, Viewer, Billing Admin
+
+Predefined Roles:
+	Fine-grained collection of roles. ex. InstanceAdmin for ComputeEngine
+	
+GSuites customer can edit the users from Admin console.
+Non GSuites customer can do the same in Cloud Identity Domain.	
+
+APIs Explorer - interactive tool lets us try Google APIs using a browser.
+Client Libraries:
+	Cloud Client Libraries - community owned
+	Google API Client Libraries - Open source
+	
+Billing:
+	Billing is must to use GCP services
+	To change the billing of a project, you must be an owner of the project and Billing Admin on the billing account
+	Setting Budget doesn't cap API usage.
+	
+CLI:
+	CloudShell can be accessed via Browser, it comes with SDK preinstalled.
+		SDK includes - gcloud, gsutil (cloud storage), bq (bigQuery)
+		
+WEEK-4
+-------	
+Pricing Calculator:
+
+
+
+	
+============== QWIKLABS QUESTS ====================
+
+Monitoring and Logging (Stackdriver Fundamentals Quest)
+	https://www.qwiklabs.com/quests/35
+	
+	
+
+
+
